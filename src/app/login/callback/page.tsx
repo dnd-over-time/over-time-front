@@ -16,8 +16,8 @@ function KakaoCallbackContent() {
         console.log('카카오 인가 코드:', code);
 
         if (code) {
-          // 백엔드 allInOne POST API로 통합 처리
-          const response = await fetch(`http://jun-playground.kro.kr:8088/v1/allInOne`, {
+          // 내부 API route로 요청 (Mixed Content 문제 해결)
+          const response = await fetch('/api/auth/kakao', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
