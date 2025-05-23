@@ -2,12 +2,21 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
   const router = useRouter();
+  const [userInfo, setUserInfo] = useState({ nickname: '', profileImageUrl: '' });
 
-  const userInfo = localStorage.getItem('loginData');
-  const { nickname, profileImageUrl } = JSON.parse(userInfo as any);
+  useEffect(() => {
+    const storedUserInfo = localStorage.getItem('loginData');
+    if (storedUserInfo) {
+      const parsedUserInfo = JSON.parse(storedUserInfo);
+      setUserInfo(parsedUserInfo);
+    }
+  }, []);
+
+  const { nickname, profileImageUrl } = userInfo;
 
   const goBack = () => {
     router.back();
@@ -39,7 +48,7 @@ export default function Page() {
               width={75}
               height={75}
               style={{ height: 75, width: 75 }}
-              src={profileImageUrl}
+              src={profileImageUrl || '/images/image1.jpg'}
             />
             <div className={'ml-6'}>안녕하세요, {nickname}님</div>
           </div>

@@ -12,6 +12,32 @@ interface Toilet {
   DISTANCE: number;
 }
 
+// API에서 받아올 마커 데이터 타입
+export interface MarkerData {
+  markerRowId: number;
+  latitude: number;
+  longitude: number;
+  locationName: string;
+  address: string;
+  contentCount: number;
+  createdAt: string;
+}
+
+// API에서 마커 데이터를 가져오는 함수
+export const fetchMarkerData = async (): Promise<MarkerData[]> => {
+  try {
+    const response = await fetch('/api/markers');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('마커 데이터를 가져오는데 실패했습니다:', error);
+    return [];
+  }
+};
+
 // 더미 화장실 데이터 생성 (청와대 근처 지역)
 export const dummy: Toilet[] = [
   {
