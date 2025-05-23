@@ -17,7 +17,7 @@ import {
   ClusterMarker1000,
 } from '@/components/Markers';
 
-import { dummy } from '@/constants/dummy';
+import { fetchMarkerData, MarkerData } from '@/constants/dummy';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import { IoMdLocate } from 'react-icons/io';
@@ -37,6 +37,9 @@ interface ClusterMarker {
 
 export default function Map() {
   const [mapCenterCoords, setMapCenterCoords] = useState<Coords | null>(null);
+  const [markerData, setMarkerData] = useState<MarkerData[]>([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   const mapRef = useRef<naver.maps.Map | null>(null);
   const currentLocationMarkerRef = useRef<naver.maps.Marker | null>(null);
@@ -48,6 +51,17 @@ export default function Map() {
   const { currentMyCoordinates, geoStatus, getCurPosition } = useGeolocation();
 
   const router = useRouter();
+
+  // API에서 마커 데이터 가져오기
+  useEffect(() => {
+    const loadMarkerData = async () => {
+      const data = await fetchMarkerData();
+      setMarkerData(data);
+      setIsDataLoaded(true);
+    };
+
+    loadMarkerData();
+  }, []);
 
   // 지도 초기화
   useEffect(() => {
@@ -83,17 +97,17 @@ export default function Map() {
 
   // 마커 초기화 함수
   const initializeMarkers = useCallback(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !isDataLoaded || markerData.length === 0) return;
 
     const dummyMarkers: naver.maps.Marker[] = [];
 
-    dummy.forEach((item) => {
-      const { Y_WGS84, X_WGS84, FNAME, ANAME, DISTANCE, POI_ID } = item;
+    markerData.forEach((item) => {
+      const { latitude, longitude, locationName, address, markerRowId } = item;
       console.log(item);
       const marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(Y_WGS84, X_WGS84),
+        position: new naver.maps.LatLng(latitude, longitude),
         map: mapRef.current!,
-        title: ANAME,
+        title: locationName,
       });
       dummyMarkers.push(marker);
 
@@ -118,13 +132,13 @@ export default function Map() {
           flushSync(() =>
             root.render(
               <MarkerInfoWindow
-                FNAME={FNAME}
-                ANAME={ANAME}
-                jibunAddress='주소 정보 없음'
-                roadAddress='도로명 주소 없음'
-                DISTANCE={DISTANCE}
+                FNAME={address}
+                ANAME={locationName}
+                jibunAddress={address}
+                roadAddress={address}
+                DISTANCE={0}
                 isSearchAddress={true}
-                onClickPanorama={() => router.push(`/${POI_ID}`)}
+                onClickPanorama={() => router.push(`/${markerRowId}`)}
               />,
             ),
           );
@@ -177,11 +191,18 @@ export default function Map() {
         if (el) el.textContent = String(count);
       },
     });
-  }, [router]);
+  }, [router, markerData, isDataLoaded]);
 
   useEffect(() => {
     if (!mapCenterCoords) return;
   }, [mapCenterCoords]);
+
+  // 마커 데이터가 로드된 후 마커 초기화
+  useEffect(() => {
+    if (isDataLoaded && isScriptLoaded && markerData.length > 0) {
+      initializeMarkers();
+    }
+  }, [isDataLoaded, isScriptLoaded, markerData, initializeMarkers]);
 
   // 현재 위치 마커 업데이트
   useEffect(() => {
@@ -202,8 +223,8 @@ export default function Map() {
   // MarkerClustering 스크립트 로드 완료 후 마커 초기화
   const handleMarkerClusteringLoad = useCallback(() => {
     console.log('MarkerClustering 스크립트가 로드되었습니다.');
-    initializeMarkers();
-  }, [initializeMarkers]);
+    setIsScriptLoaded(true);
+  }, []);
 
   const handleZoomIn = () => {
     if (mapRef.current) {

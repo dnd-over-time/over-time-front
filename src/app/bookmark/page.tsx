@@ -8,7 +8,7 @@ import DrawerItem from '@/components/DrawerItem';
 const bookmarkData = [
   {
     id: 1,
-    title: '어린의 손님의 따뜻한 편지',
+    title: '어린이 손님의 따뜻한 편지',
     description: '공덕역 인근의 "고리 돈까스"는 20년 넘게 지역 주민들의..',
     img: 'image1.jpg',
     bookmark: true,
