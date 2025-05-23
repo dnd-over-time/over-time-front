@@ -29,16 +29,10 @@ export function CurrentMyLocationMarker() {
 export function MarkerInfoWindow({
   FNAME,
   ANAME,
-  jibunAddress,
-  roadAddress,
   DISTANCE,
   isSearchAddress,
 }: MarkerInfoWindowProps) {
   const [drawer, setDrawer] = useState(350);
-
-  const handleOpenDrawer = (adjustment: number) => {
-    setDrawer(Math.max(200, Math.min(400, drawer + adjustment)));
-  };
 
   return (
     <>

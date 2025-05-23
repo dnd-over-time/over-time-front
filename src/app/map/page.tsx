@@ -4,7 +4,6 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createRoot } from 'react-dom/client';
-import { IoSearch } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 
@@ -22,11 +21,9 @@ import {
 import { dummy } from '@/constants/dummy';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { FiMinus, FiPlus } from 'react-icons/fi';
-import { IoIosClose, IoMdLocate } from 'react-icons/io';
+import { IoMdLocate } from 'react-icons/io';
 import Image from 'next/image';
-import { DrawerDemo } from '@/components/Drawer';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const MarkerClustering: any;
 
 type MapType = 'NORMAL' | 'TERRAIN' | 'SATELLITE' | 'HYBRID';
@@ -56,7 +53,6 @@ export default function Map() {
   const toiletInfoWindowsRef = useRef<naver.maps.InfoWindow[]>([]);
   const geoCoderInfowindowRef = useRef<naver.maps.InfoWindow | null>(null);
   const markerClusterRef = useRef<any>(null);
-  const panoramaRef = useRef<HTMLDivElement | null>(null);
   const addressInputRef = useRef<HTMLInputElement | null>(null);
 
   const { currentMyCoordinates, geoStatus, getCurPosition } = useGeolocation();
@@ -129,19 +125,6 @@ export default function Map() {
       geoCoderInfowindow.open(mapRef.current, searchAddressCoordinate);
       geoCoderInfowindowRef.current = geoCoderInfowindow;
     });
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') searchAddressToCoordinate(addressInputRef.current?.value || '');
-  };
-
-  const handleSearchClick = () => searchAddressToCoordinate(addressInputRef.current?.value || '');
-
-  const handleMapTypeChange = (mapType: MapType) => {
-    if (mapRef.current && selectedMapType !== mapType) {
-      mapRef.current.setMapTypeId(naver.maps.MapTypeId[mapType]);
-      setSelectedMapType(mapType);
-    }
   };
 
   // 마커 초기화 함수

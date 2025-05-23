@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-
 import {
   Drawer,
   DrawerContent,
@@ -13,55 +12,7 @@ import {
 import DrawerItem from './DrawerItem';
 import Image from 'next/image';
 
-const data = [
-  {
-    goal: 400,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 278,
-  },
-  {
-    goal: 189,
-  },
-  {
-    goal: 239,
-  },
-  {
-    goal: 300,
-  },
-  {
-    goal: 200,
-  },
-  {
-    goal: 278,
-  },
-  {
-    goal: 189,
-  },
-  {
-    goal: 349,
-  },
-];
-
 export function DrawerDemo({ drawer }: { drawer: number }) {
-  const [goal, setGoal] = React.useState(350);
-
-  function onClick(adjustment: number) {
-    setGoal(Math.max(200, Math.min(400, goal + adjustment)));
-  }
-
   return (
     <Drawer>
       <DrawerTrigger asChild>
