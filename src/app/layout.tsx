@@ -29,6 +29,7 @@ export default function RootLayout({
         <div className='mx-auto min-h-screen max-w-[393px]'>{children}</div>
         <Script
           src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAP_API_KEY}`}
+          strategy='beforeInteractive'
         />
       </body>
     </html>
