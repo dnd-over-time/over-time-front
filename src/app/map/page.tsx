@@ -63,18 +63,29 @@ export default function Map() {
     loadMarkerData();
   }, []);
 
+  // 최초 내 위치(currentMyCoordinates)가 로드되면 mapCenterCoords를 currentMyCoordinates 값으로 변경
+  // 위치 가져오기에 실패했을 때는 기본 좌표 사용
+  useEffect(() => {
+    if (currentMyCoordinates && !mapCenterCoords) {
+      setMapCenterCoords(currentMyCoordinates);
+    } else if (geoStatus === 'error' && !mapCenterCoords) {
+      // 위치 가져오기 실패 시 기본 좌표 설정
+      setMapCenterCoords({ lat: 37.5759, lng: 126.977 });
+    }
+  }, [currentMyCoordinates, mapCenterCoords, geoStatus]);
+
   // 지도 초기화
   useEffect(() => {
-    if (mapRef.current) return;
+    if (!mapCenterCoords || mapRef.current) return;
 
     mapRef.current = new naver.maps.Map('map', {
-      center: new naver.maps.LatLng(37.5759, 126.977),
+      center: new naver.maps.LatLng(mapCenterCoords.lat, mapCenterCoords.lng),
       zoom: 18,
       minZoom: 8,
       mapDataControl: false,
       disableKineticPan: false,
     });
-  }, []);
+  }, [mapCenterCoords]);
 
   // 기존 마커와 클러스터 제거 함수
   const clearMapOverlays = () => {
