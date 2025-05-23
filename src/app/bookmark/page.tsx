@@ -37,9 +37,7 @@ export default function Bookmark() {
       const storedUserInfo = localStorage.getItem('loginData');
       if (storedUserInfo) {
         try {
-          const response = await fetch(
-            'http://jun-playground.kro.kr:8088/api/contents/markingList/9',
-          );
+          const response = await fetch('/api/bookmark/9');
           const data: ApiBookmarkItem[] = await response.json();
           console.log('API 응답 데이터:', data);
 

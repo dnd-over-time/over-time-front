@@ -37,22 +37,19 @@ export function MarkerInfoWindow({
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `http://jun-playground.kro.kr:8088/api/contents/marker/${markerRowId}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      const response = await fetch(`/api/marker/${markerRowId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+      });
       const dataList = await response.json();
       setData(dataList);
     };
 
     const data = fetchData();
     console.log(data);
-  }, []);
+  }, [markerRowId]);
 
   return (
     <>
