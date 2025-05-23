@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { DrawerDemo } from './Drawer';
-import { Drawer } from 'vaul';
 
 interface MarkerInfoWindowProps {
   FNAME: string;
