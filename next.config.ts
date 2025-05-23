@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig = {
   images: {
-    domains: ['k.kakaocdn.net'], // 이 도메인을 허용해야 함
+    domains: ['k.kakaocdn.net', 'dnd-hackathon-overtime-bucket.s3.ap-northeast-2.amazonaws.com'],
   },
 };
 export default nextConfig;

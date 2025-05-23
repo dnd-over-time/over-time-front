@@ -12,7 +12,7 @@ import {
 import DrawerItem from './DrawerItem';
 import Image from 'next/image';
 
-export function DrawerDemo() {
+export function DrawerDemo({ data }: any) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -33,9 +33,24 @@ export function DrawerDemo() {
             <DrawerTitle className='text-[18px] font-bold'>내 주변의 이야기</DrawerTitle>
           </DrawerHeader>
           <div className='grid gap-4 p-4 pb-0'>
-            <DrawerItem title='어린이 손님의 따뜻한 편지' img={'image1.jpg'} bookmark />
-            <DrawerItem title='한강 너머로 이어진 큰 언덕' img={'image2.png'} bookmark />
-            <DrawerItem title="아리따운 '도화낭자" img={'image3.png'} bookmark={false} />
+            {data.map(
+              (
+                d: {
+                  fileExtension: string;
+                  mediaUrl: null;
+                  name: string;
+                },
+                i: number,
+              ) => (
+                <DrawerItem
+                  key={i}
+                  title={d.name}
+                  isAudio={d.fileExtension === 'audio'}
+                  mediaUrl={d.mediaUrl}
+                  bookmark={i % 3 !== 0}
+                />
+              ),
+            )}
           </div>
           <DrawerFooter></DrawerFooter>
         </div>

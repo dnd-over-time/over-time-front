@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { DrawerDemo } from './Drawer';
 
 interface MarkerInfoWindowProps {
+  markerRowId: number;
   FNAME: string;
   ANAME: string;
   jibunAddress: string;
@@ -25,7 +27,33 @@ export function CurrentMyLocationMarker() {
   );
 }
 
-export function MarkerInfoWindow({ ANAME, DISTANCE, isSearchAddress }: MarkerInfoWindowProps) {
+export function MarkerInfoWindow({
+  markerRowId,
+  ANAME,
+  DISTANCE,
+  isSearchAddress,
+}: MarkerInfoWindowProps) {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `http://jun-playground.kro.kr:8088/api/contents/marker/${markerRowId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const dataList = await response.json();
+      setData(dataList);
+    };
+
+    const data = fetchData();
+    console.log(data);
+  }, []);
+
   return (
     <>
       <div className='flex flex-col gap-y-1.5 rounded-md border border-gray-200 bg-white px-5 py-4 whitespace-nowrap shadow-[0_4px_16px_0_rgba(0,0,0,0.1)]'>
@@ -46,7 +74,7 @@ export function MarkerInfoWindow({ ANAME, DISTANCE, isSearchAddress }: MarkerInf
             </span>
           </div>
           <div className='flex justify-end'>
-            <DrawerDemo />
+            <DrawerDemo data={data} />
           </div>
         </div>
       </div>
