@@ -37,7 +37,7 @@ export default function KakaoCallback() {
           localStorage.setItem('loginData', JSON.stringify(data));
 
           // 로그인 완료 후 메인 페이지로 이동
-          router.push('/');
+          router.push('/onboarding/step1');
         }
       } catch (error) {
         console.error('로그인 처리 중 오류 발생:', error);
