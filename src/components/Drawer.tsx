@@ -12,7 +12,7 @@ import {
 import DrawerItem from './DrawerItem';
 import Image from 'next/image';
 
-export function DrawerDemo({ drawer }: { drawer: number }) {
+export function DrawerDemo() {
   return (
     <Drawer>
       <DrawerTrigger asChild>

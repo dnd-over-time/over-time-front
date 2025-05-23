@@ -9,7 +9,6 @@ import Script from 'next/script';
 
 import {
   CurrentMyLocationMarker,
-  GeoCoderInfowindow,
   MarkerInfoWindow,
   ClusterMarker10,
   ClusterMarker100,
@@ -24,11 +23,10 @@ import { FiMinus, FiPlus } from 'react-icons/fi';
 import { IoMdLocate } from 'react-icons/io';
 import Image from 'next/image';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const MarkerClustering: any;
 
-type MapType = 'NORMAL' | 'TERRAIN' | 'SATELLITE' | 'HYBRID';
-
-interface Coords {
+export interface Coords {
   lat: number;
   lng: number;
 }
@@ -37,23 +35,15 @@ interface ClusterMarker {
   getElement(): HTMLElement;
 }
 
-const seoulBoundaryCoordinates = {
-  north: 37.715133, // 최대 위도
-  south: 37.413294, // 최소 위도
-  east: 127.269311, // 최대 경도
-  west: 126.734086, // 최소 경도
-} as const;
-
 export default function Map() {
-  const [selectedMapType, setSelectedMapType] = useState<MapType>('NORMAL');
   const [mapCenterCoords, setMapCenterCoords] = useState<Coords | null>(null);
 
   const mapRef = useRef<naver.maps.Map | null>(null);
   const currentLocationMarkerRef = useRef<naver.maps.Marker | null>(null);
   const toiletInfoWindowsRef = useRef<naver.maps.InfoWindow[]>([]);
   const geoCoderInfowindowRef = useRef<naver.maps.InfoWindow | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const markerClusterRef = useRef<any>(null);
-  const addressInputRef = useRef<HTMLInputElement | null>(null);
 
   const { currentMyCoordinates, geoStatus, getCurPosition } = useGeolocation();
 
@@ -89,42 +79,6 @@ export default function Map() {
       markerClusterRef.current.setMap(null);
       markerClusterRef.current = null;
     }
-  };
-
-  const searchAddressToCoordinate = (searchAddress: string) => {
-    const trimmedSearchAddress = searchAddress.trim();
-    if (!trimmedSearchAddress) return;
-
-    naver.maps.Service.geocode({ query: trimmedSearchAddress }, (status, response) => {
-      if (!mapRef.current) return;
-
-      const [addresses] = response.v2.addresses;
-      const { roadAddress, jibunAddress, englishAddress, x, y } = addresses;
-      const searchAddressCoordinate = new naver.maps.LatLng(Number(y), Number(x));
-
-      const geoCoderInfowindow = new naver.maps.InfoWindow({
-        content: renderToStaticMarkup(
-          <GeoCoderInfowindow
-            roadAddress={roadAddress}
-            jibunAddress={jibunAddress}
-            englishAddress={englishAddress}
-          />,
-        ),
-        anchorSize: {
-          width: 12,
-          height: 14,
-        },
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-      });
-
-      clearMapOverlays();
-      setMapCenterCoords({ lat: Number(y), lng: Number(x) });
-      mapRef.current.panTo(searchAddressCoordinate);
-
-      geoCoderInfowindow.open(mapRef.current, searchAddressCoordinate);
-      geoCoderInfowindowRef.current = geoCoderInfowindow;
-    });
   };
 
   // 마커 초기화 함수

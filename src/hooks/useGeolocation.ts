@@ -1,7 +1,7 @@
 'use client';
 
+import { Coords } from '@/app/map/page';
 import { useState, useEffect } from 'react';
-import { Coords } from '@/util/types';
 
 type GeolocationStatus = 'idle' | 'loading' | 'success' | 'error';
 

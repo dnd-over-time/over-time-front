@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { DrawerDemo } from './Drawer';
 
 interface MarkerInfoWindowProps {
@@ -26,14 +25,7 @@ export function CurrentMyLocationMarker() {
   );
 }
 
-export function MarkerInfoWindow({
-  FNAME,
-  ANAME,
-  DISTANCE,
-  isSearchAddress,
-}: MarkerInfoWindowProps) {
-  const [drawer, setDrawer] = useState(350);
-
+export function MarkerInfoWindow({ ANAME, DISTANCE, isSearchAddress }: MarkerInfoWindowProps) {
   return (
     <>
       <div className='flex flex-col gap-y-1.5 rounded-md border border-gray-200 bg-white px-5 py-4 whitespace-nowrap shadow-[0_4px_16px_0_rgba(0,0,0,0.1)]'>
@@ -54,7 +46,7 @@ export function MarkerInfoWindow({
             </span>
           </div>
           <div className='flex justify-end'>
-            <DrawerDemo drawer={drawer} />
+            <DrawerDemo />
           </div>
         </div>
       </div>
