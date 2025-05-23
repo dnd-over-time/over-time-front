@@ -19,7 +19,7 @@ export default function DrawerItem({
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlayAudio = () => {
-    const audioElement = document.getElementById(title);
+    const audioElement = document.getElementById(title) as HTMLAudioElement | null;
     if (audioElement) {
       audioElement.play();
       setIsPlaying(true);
@@ -27,7 +27,7 @@ export default function DrawerItem({
   };
 
   const handlePause = () => {
-    const audioElement = document.getElementById(title);
+    const audioElement = document.getElementById(title) as HTMLAudioElement | null;
     if (audioElement) {
       audioElement.pause();
       setIsPlaying(false);
@@ -77,7 +77,7 @@ export default function DrawerItem({
                 >
                   이야기 재생하기
                 </div>
-                <audio id={title} src={mediaUrl} preload='metadata' />
+                <audio id={title} src={mediaUrl as string} preload='metadata' />
               </div>
             ) : (
               <></>
