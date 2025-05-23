@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import Script from 'next/script';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,12 +25,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
-        <Script
-          type='text/javascript'
-          src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAP_API_KEY}`}
-          strategy='beforeInteractive'
-        />
+        <div className='mx-auto min-h-screen max-w-[393px]'>{children}</div>
       </body>
     </html>
   );
