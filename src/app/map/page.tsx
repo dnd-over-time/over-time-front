@@ -52,6 +52,13 @@ export default function Map() {
 
   const router = useRouter();
 
+  // 컴포넌트 마운트 시 MarkerClustering 스크립트가 이미 로드되어 있는지 확인
+  useEffect(() => {
+    if (typeof MarkerClustering !== 'undefined') {
+      setIsScriptLoaded(true);
+    }
+  }, []);
+
   // API에서 마커 데이터 가져오기
   useEffect(() => {
     const loadMarkerData = async () => {
