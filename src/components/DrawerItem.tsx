@@ -42,7 +42,7 @@ export default function DrawerItem({
         </div>
         <div className='font-bold'>{title}</div>
         {description ? (
-          <div className='text-sm leading-relaxed text-gray-600'>{description}</div>
+          <div className='line-clamp-2 text-sm leading-relaxed text-gray-600'>{description}</div>
         ) : (
           <div className='height-10 flex items-center justify-center rounded-full bg-black px-2 text-center font-bold text-white hover:cursor-pointer hover:opacity-70'>
             이야기 재생하기
