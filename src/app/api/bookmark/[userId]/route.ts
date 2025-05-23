@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request, { params }: { params: { userId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ userId: string }> }) {
   try {
-    const { userId } = params;
+    const { userId } = await params;
 
     const response = await fetch(
       `http://jun-playground.kro.kr:8088/api/contents/markingList/${userId}`,
