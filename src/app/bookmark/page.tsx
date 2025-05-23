@@ -3,34 +3,65 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import DrawerItem from '@/components/DrawerItem';
+import { useEffect, useState } from 'react';
 
-// 하드코딩된 북마크 데이터
-const bookmarkData = [
-  {
-    id: 1,
-    title: '어린이 손님의 따뜻한 편지',
-    description: '공덕역 인근의 "고리 돈까스"는 20년 넘게 지역 주민들의..',
-    img: 'image1.jpg',
-    bookmark: true,
-  },
-  {
-    id: 2,
-    title: '한강 너머로 이어진 큰 언덕',
-    description: '공덕동은 단순한 지명이 아닙니다. "은덕기"라는 이름처럼..',
-    img: 'image2.png',
-    bookmark: true,
-  },
-  {
-    id: 3,
-    title: '아리따운 "도화낭자"',
-    description: '도화동에는 "도화낭자"라는 전설이 전해집니다. 옛날 이곳에..',
-    img: 'image3.png',
-    bookmark: true,
-  },
-];
+// 북마크 아이템 타입 정의
+interface BookmarkItem {
+  id: number | string;
+  name: string;
+  description: string;
+  img: string;
+  bookmark: boolean;
+}
+
+// API 응답 아이템 타입 (실제 API 구조에 맞게 정의)
+interface ApiBookmarkItem {
+  contentRowId?: number;
+  id?: number;
+  name?: string;
+  title?: string;
+  description?: string;
+  img?: string;
+  image?: string;
+  bookmark?: boolean;
+  [key: string]: unknown; // 추가 속성들을 위한 인덱스 시그니처
+}
 
 export default function Bookmark() {
+  const [bookmarkData, setBookmarkData] = useState<BookmarkItem[]>([]);
+
   const router = useRouter();
+
+  useEffect(() => {
+    const getBookmarkData = async () => {
+      const storedUserInfo = localStorage.getItem('loginData');
+      if (storedUserInfo) {
+        try {
+          const response = await fetch(
+            'http://jun-playground.kro.kr:8088/api/contents/markingList/9',
+          );
+          const data: ApiBookmarkItem[] = await response.json();
+          console.log('API 응답 데이터:', data);
+
+          // 데이터 정규화: 필요한 속성들에 기본값 제공
+          const normalizedData: BookmarkItem[] = data.map((item, index) => ({
+            id: item.contentRowId || item.id || index,
+            name: item.name || item.title || '제목 없음',
+            description: item.description || '설명 없음',
+            img: item.img || item.image || 'image1.jpg',
+            bookmark: item.bookmark !== undefined ? item.bookmark : true,
+          }));
+
+          setBookmarkData(normalizedData);
+        } catch (error) {
+          console.error('북마크 데이터를 가져오는데 실패했습니다:', error);
+          setBookmarkData([]);
+        }
+      }
+    };
+
+    getBookmarkData();
+  }, []);
 
   return (
     <div className='min-h-screen bg-[#F7F4F2]'>
@@ -55,7 +86,7 @@ export default function Bookmark() {
           {bookmarkData.map((item) => (
             <DrawerItem
               key={item.id}
-              title={item.title}
+              title={item.name}
               description={item.description}
               img={item.img}
               bookmark={item.bookmark}

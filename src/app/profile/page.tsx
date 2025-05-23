@@ -7,16 +7,22 @@ import { useEffect, useState } from 'react';
 export default function Page() {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState({ nickname: '', profileImageUrl: '' });
+  const [imageSrc, setImageSrc] = useState('/images/image1.jpg');
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('loginData');
     if (storedUserInfo) {
       const parsedUserInfo = JSON.parse(storedUserInfo);
       setUserInfo(parsedUserInfo);
+      setImageSrc(parsedUserInfo.profileImageUrl || '/images/image1.jpg');
     }
   }, []);
 
-  const { nickname, profileImageUrl } = userInfo;
+  const { nickname } = userInfo;
+
+  const handleImageError = () => {
+    setImageSrc('/images/image1.jpg');
+  };
 
   const goBack = () => {
     router.back();
@@ -44,11 +50,12 @@ export default function Page() {
           <div className='flex h-30 w-full items-center rounded-2xl bg-white text-lg font-bold'>
             <Image
               className={'ml-8 rounded-full'}
-              alt='image'
+              alt='profile image'
               width={75}
               height={75}
               style={{ height: 75, width: 75 }}
-              src={profileImageUrl || '/images/image1.jpg'}
+              src={imageSrc}
+              onError={handleImageError}
             />
             <div className={'ml-6'}>안녕하세요, {nickname}님</div>
           </div>
