@@ -121,7 +121,7 @@ export default function Map() {
 
     markerData.forEach((item) => {
       const { latitude, longitude, locationName, address, markerRowId } = item;
-      console.log(item);
+
       const marker = new naver.maps.Marker({
         position: new naver.maps.LatLng(latitude, longitude),
         map: mapRef.current!,
@@ -150,17 +150,20 @@ export default function Map() {
           flushSync(() =>
             root.render(
               <MarkerInfoWindow
+                markerRowId={markerRowId}
                 FNAME={address}
                 ANAME={locationName}
                 jibunAddress={address}
                 roadAddress={address}
                 DISTANCE={0}
                 isSearchAddress={true}
-                onClickPanorama={() => router.push(`/${markerRowId}`)}
+                onClickPanorama={() => {
+                  console.log('hi');
+                  router.push(`/${markerRowId}`);
+                }}
               />,
             ),
           );
-
           infoWindow.open(mapRef.current!, marker);
         }
       });

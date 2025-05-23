@@ -88,8 +88,9 @@ export default function Bookmark() {
               key={item.id}
               title={item.name}
               description={item.description}
-              img={item.img}
               bookmark={item.bookmark}
+              isAudio={false}
+              mediaUrl={null}
             />
           ))}
         </div>
