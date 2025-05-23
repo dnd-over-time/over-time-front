@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import { DrawerDemo } from './Drawer';
+import { Drawer } from 'vaul';
+
 interface MarkerInfoWindowProps {
   FNAME: string;
   ANAME: string;
@@ -30,49 +34,38 @@ export function MarkerInfoWindow({
   roadAddress,
   DISTANCE,
   isSearchAddress,
-  onClickPanorama,
 }: MarkerInfoWindowProps) {
+  const [drawer, setDrawer] = useState(350);
+
+  const handleOpenDrawer = (adjustment: number) => {
+    setDrawer(Math.max(200, Math.min(400, drawer + adjustment)));
+  };
+
   return (
-    <div className='flex flex-col gap-y-1.5 rounded-md border border-gray-200 bg-white px-5 py-4 whitespace-nowrap shadow-[0_4px_16px_0_rgba(0,0,0,0.1)]'>
-      <div className='flex items-center gap-x-2'>
-        <p className='text-lg font-bold'>{FNAME}</p>
-        <p className='text-sm font-medium text-gray-500'>{ANAME}</p>
-      </div>
-      <div className='flex flex-col gap-y-1'>
-        {roadAddress && (
-          <div className='text-sm font-medium'>
-            <span className='mr-1.5 rounded border border-gray-400 px-1 py-0.5 text-xs font-semibold text-gray-700'>
-              도로명
-            </span>
-            {roadAddress}
-          </div>
-        )}
-        {jibunAddress && (
-          <div className='text-sm font-medium'>
-            <span className='mr-1.5 rounded border border-gray-400 px-1 py-0.5 text-xs font-semibold text-gray-700'>
-              지번
-            </span>
-            {jibunAddress}
-          </div>
-        )}
-      </div>
-      <div className='flex items-center justify-between gap-x-4'>
-        <div className='text-sm font-medium'>
-          {isSearchAddress ? '검색한 주소로부터 약 ' : '현재 위치로부터 약 '}
-          <span className='font-bold'>
-            {DISTANCE < 1 ? `${Math.round(DISTANCE * 1000)}m` : `${Number(DISTANCE.toFixed(1))}km`}
-          </span>
+    <>
+      <div className='flex flex-col gap-y-1.5 rounded-md border border-gray-200 bg-white px-5 py-4 whitespace-nowrap shadow-[0_4px_16px_0_rgba(0,0,0,0.1)]'>
+        <div className='flex items-center gap-x-2'>
+          <p className='text-lg font-bold'>어린이 손님의 따뜻한 편지</p>
         </div>
-        <div className='flex justify-end'>
-          <button
-            className='flex rounded-full border border-gray-300 p-1.5 text-gray-600 hover:border-blue-500 hover:text-blue-500'
-            onClick={onClickPanorama}
-          >
-            버튼
-          </button>
+        <div>
+          <p className='text-sm font-medium text-gray-500'>{ANAME}</p>
+        </div>
+        <div className='flex flex-col gap-y-1'></div>
+        <div className='flex items-center justify-between gap-x-4'>
+          <div className='text-sm font-medium'>
+            {isSearchAddress ? '검색한 주소로부터 약 ' : '현재 위치로부터 약 '}
+            <span className='font-bold'>
+              {DISTANCE < 1
+                ? `${Math.round(DISTANCE * 1000)}m`
+                : `${Number(DISTANCE.toFixed(1))}km`}
+            </span>
+          </div>
+          <div className='flex justify-end'>
+            <DrawerDemo drawer={drawer} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
