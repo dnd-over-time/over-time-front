@@ -66,7 +66,7 @@ export default function DrawerItem({
         </div>
         <div className='font-bold'>{title}</div>
         {description ? (
-          <div className='text-sm leading-relaxed text-gray-600'>{description}</div>
+          <div className='line-clamp-2 text-sm leading-relaxed text-gray-600'>{description}</div>
         ) : (
           <div>
             {isAudio ? (

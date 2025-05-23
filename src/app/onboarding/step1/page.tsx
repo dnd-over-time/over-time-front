@@ -22,7 +22,7 @@ export default function Step1() {
         />
 
         {/* 발자국 이미지 */}
-        <div className='mt-18'>
+        <div className='mt-10'>
           <Image
             src='/step1-foot.png'
             alt='발자국'
@@ -34,7 +34,7 @@ export default function Step1() {
       </div>
 
       {/* 하단 버튼 */}
-      <div className='mt-30 w-full max-w-sm'>
+      <div className='mt-23 w-full max-w-sm'>
         <Link
           href='/onboarding/step2'
           className='block w-full rounded-full bg-black px-6 py-4 text-center text-sm font-medium text-white'
