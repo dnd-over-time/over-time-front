@@ -46,7 +46,7 @@ export default function Bookmark() {
             id: item.contentRowId || item.id || index,
             name: item.name || item.title || '제목 없음',
             description: item.description || '설명 없음',
-            img: item.img || item.image || 'image1.jpg',
+            img: item.img || item.image || '/images/image1.jpg',
             bookmark: item.bookmark !== undefined ? item.bookmark : true,
           }));
 
@@ -88,7 +88,7 @@ export default function Bookmark() {
               description={item.description}
               bookmark={item.bookmark}
               isAudio={false}
-              mediaUrl={null}
+              mediaUrl={item.img}
             />
           ))}
         </div>

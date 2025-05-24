@@ -17,6 +17,7 @@ export default function DrawerItem({
 }) {
   const [newBookmark, setNewBookmark] = useState(bookmark);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const handlePlayAudio = () => {
     const audioElement = document.getElementById(title) as HTMLAudioElement | null;
@@ -34,6 +35,29 @@ export default function DrawerItem({
     }
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  // 이미지 URL 처리 함수
+  const getImageSrc = () => {
+    if (imageError) {
+      return '/images/image1.jpg';
+    }
+
+    if (!mediaUrl) {
+      return '/images/image1.jpg';
+    }
+
+    // 이미 전체 URL이거나 절대 경로인 경우
+    if (mediaUrl.startsWith('http') || mediaUrl.startsWith('/')) {
+      return mediaUrl;
+    }
+
+    // 상대 경로인 경우 /images/ 추가
+    return `/images/${mediaUrl}`;
+  };
+
   return (
     <div className='flex flex-row rounded-2xl bg-white p-4'>
       {isAudio ? (
@@ -41,11 +65,12 @@ export default function DrawerItem({
       ) : (
         <Image
           style={{ width: '110px', height: '110px' }}
-          src={mediaUrl || ''}
+          src={getImageSrc()}
           width={110}
           height={110}
           alt='image'
           className='rounded-lg object-cover'
+          onError={handleImageError}
         />
       )}
 
